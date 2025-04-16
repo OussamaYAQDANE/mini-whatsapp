@@ -1,6 +1,7 @@
 <template>
     <div class="min-vh-100  page" style="background-color: #242424;">
         <img id="logo" src="../assets/logo.png" style="width: 100px;">
+        <!-- Just a loading indicator, chill guy fr. -->
     </div>
 </template>
 
