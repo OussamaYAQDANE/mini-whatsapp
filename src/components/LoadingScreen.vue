@@ -4,6 +4,7 @@
         <!-- Just a loading indicator, chill guy fr. -->
          <!-- You're a nigga fr. -->
         <!-- Meow -->
+        <!-- Hello from the main branch -->
     </div>
 </template>
 
