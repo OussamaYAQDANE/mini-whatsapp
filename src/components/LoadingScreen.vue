@@ -3,6 +3,7 @@
         <img id="logo" src="../assets/logo.png" style="width: 100px;">
         <!-- Just a loading indicator, chill guy fr. -->
          <!-- You're a nigga fr. -->
+        <!-- Meow -->
     </div>
 </template>
 
