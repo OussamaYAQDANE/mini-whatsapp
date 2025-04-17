@@ -210,7 +210,7 @@
 <script setup>
 /* eslint-disable */
 import { auth, db } from "@/firebase/firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { connectAuthEmulator, createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc, serverTimestamp, query, collection, where, getDocs } from "firebase/firestore";
 import { storage } from "@/firebase/firebase-config"
 import { uploadBytesResumable, getDownloadURL, ref as storageRef } from "firebase/storage";
@@ -279,6 +279,12 @@ async function handleSubmit() {
 
   if (password.value != passwordConfirmation.value) {
     passwordConfirmationError.value = "Passwords don't match";
+    correct = false;
+  }
+  const username_regex = /^[a-zA-Z0-9_]+$/
+
+  if (!username.value || !username_regex.test(username.value)){
+    usernameError.value = 'Please choose a valid username';
     correct = false;
   }
 
