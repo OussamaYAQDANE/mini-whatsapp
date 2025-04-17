@@ -1,5 +1,6 @@
 <template>
   <div id="list">
+    
     <div class="discussion-div" :class="{selected: selected == i}"  v-for="(discussion, i) in discussions" :key="i" @click="selectDiscussion(i)">
         <discussion-div :discussion="discussion"  />
     </div>
