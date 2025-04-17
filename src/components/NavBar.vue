@@ -17,8 +17,8 @@
         OUSSAMA
       </div>
       <div>
-        <router-link to="/">LOL red</router-link>
-        <router-link to="test">LOL blue</router-link>
+        <!--------------------------------- Router links go here my niggas ------------------------------------>
+        <router-link to="/">LOL</router-link>
       </div>
       <div
         class="d-flex actions flex-row-reverse align-items-center"
@@ -52,8 +52,20 @@
     </div>
   </nav>
 </template>
-    
-    <script setup>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+<script setup>
 import { defineProps } from "vue";
 import DefaultProfile from "@/assets/default-profile.png";
 import { signOut } from "firebase/auth";
