@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { doc, getDoc, getDocs, collection, where, query, arrayUnion, arrayRemove, serverTimestamp, orderBy, limit } from "firebase/firestore"
-import { auth, db } from "./firebase"
+import { auth, db } from "../firebase/firebase-config"
 
 
 async function getUserById(uid){
@@ -18,18 +18,18 @@ async function getMyDiscussions(){
     discussionsSnapshot.forEach(doc =>{
         discussions.push({id: doc.id, ...doc.data()});
     })
-    promises = [];
+    let promises = [];
     discussions.forEach((e)=>{
-        otherUid = auth.currentUser.uid === e.couple[0]? e.couple[1]: e.couple[0];
+        let otherUid = auth.currentUser.uid === e.couple[0]? e.couple[1]: e.couple[0];
         promises.push(getUserById(otherUid));
     })
-    await Promise.all(promises);
-    i = 0;
-    promises.forEach((e)=>{
+    promises = await Promise.all(promises);
+    console.log(promises);
+    
+    promises.forEach((e, i)=>{
         discussions[i]["firstName"] = e.firstName;
         discussions[i]["lastName"] = e.lastName;
         discussions[i]["profilePic"] = e.profilePic;
-        i++;
     })
     return discussions;
 
@@ -61,3 +61,5 @@ async function getGroupMessages(){
     
 
 }
+
+export {getMyGroups, getUserById, getMyDiscussions}
