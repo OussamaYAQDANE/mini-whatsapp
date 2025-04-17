@@ -1,6 +1,7 @@
 function getTimeAgo(timestamp) {
   const now = new Date(new Date().getTime() + 3600*1000)
-  const date = timestamp.toDate(); // Convert Firestore Timestamp to JS Date
+  // TODO const date = timestamp.toDate(); // Convert Firestore Timestamp to JS Date
+  const date = new Date(timestamp)
 
   const seconds = Math.floor((now - date) / 1000);
 

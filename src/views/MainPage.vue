@@ -1,8 +1,11 @@
 <template>
   <loading-screen v-if="isLoading" />
-  <div v-else class="d-flex flex-column" style="width: 100%; min-height: 100%">
+  <div v-else class="d-flex flex-column" style="width: 100%; height: 100%; overflow: hidden;">
     <nav-bar />
-    <router-view />
+    <div style="height: 100%; overflow: auto;">
+        <router-view />
+    </div>
+    
   </div>
 </template>
 
