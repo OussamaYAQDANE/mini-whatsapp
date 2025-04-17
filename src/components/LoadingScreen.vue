@@ -13,7 +13,6 @@
 
 #logo{
     animation: pulse 2s infinite ease-in-out;
-    
 }
 
 @keyframes pulse {

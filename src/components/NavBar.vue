@@ -16,7 +16,10 @@
         />
         OUSSAMA
       </div>
-
+      <div>
+        <router-link to="/">LOL red</router-link>
+        <router-link to="test">LOL blue</router-link>
+      </div>
       <div
         class="d-flex actions flex-row-reverse align-items-center"
         style="width: fit-content; justify-content: space-around"
@@ -41,8 +44,9 @@
         <div
           class="icon-div pt-1 pb-1 ps-2 pe-3 haha"
           style="border-radius: 25px; font-size: 16px; margin-right: 12px"
+          @click="signOut(auth)"
         >
-          <i class="material-icons" style="font-size: 28px">logout</i> Logout
+          <i class="material-icons" style="font-size: 28px" >logout</i> Logout
         </div>
       </div>
     </div>
@@ -52,6 +56,8 @@
     <script setup>
 import { defineProps } from "vue";
 import DefaultProfile from "@/assets/default-profile.png";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/firebase-config";
 const props = defineProps({
   profilePic: String,
   modelValue: String,
