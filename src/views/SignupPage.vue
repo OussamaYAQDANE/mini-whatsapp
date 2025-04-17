@@ -126,8 +126,25 @@
               </div>
             </div>
           </div>
+          <label  class="form-label">Username</label>
+          <div class="input-group">
+            <span class="input-group-text">@</span>
+            <input
+              class="form-control"
+              v-model="username"
+              placeholder="Choose a unique username"
+              aria-errormessage="username-error"
+              @input="usernameError = ''"
+            />
+            
+          </div>
+          <div>
+              <small id="username-error" class="text-danger">{{
+                usernameError || " &nbsp;"
+              }}</small>
+            </div>
 
-          <div class="mb-1">
+          <div class="">
             <label for="email" class="form-label">Email</label>
             <input
               type="email"
@@ -144,7 +161,7 @@
             </div>
           </div>
 
-          <div class="mb-1">
+          <div class="">
             <label for="password" class="form-label">Password</label>
             <input
               type="password"
@@ -191,9 +208,10 @@
 </template>
   
 <script setup>
+/* eslint-disable */
 import { auth, db } from "@/firebase/firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { setDoc, doc, serverTimestamp, query, collection, where, getDocs } from "firebase/firestore";
 import { storage } from "@/firebase/firebase-config"
 import { uploadBytesResumable, getDownloadURL, ref as storageRef } from "firebase/storage";
 import { ref } from "vue";
@@ -223,6 +241,9 @@ const signupSucess = ref(false);
 const isLoading = ref(false)
 
 const bio = ref('');
+
+const username = ref('');
+const usernameError = ref('');
 
 async function handleSubmit() {
 
@@ -263,6 +284,16 @@ async function handleSubmit() {
 
   if (correct) {
     isLoading.value = true;
+    const q = query(collection(db, "users"), where("username", "==", username.value))
+    const usernames = await getDocs(q);
+    console.log(usernames);
+    if (!usernames.empty){
+      usernameError.value = "Username already taken";
+      isLoading.value = false;
+
+      return;
+    }
+  
     try {
       const userCredentials = await createUserWithEmailAndPassword(
         auth,
@@ -275,7 +306,8 @@ async function handleSubmit() {
       await setDoc(docRef, {
         firstName: firstName.value,
         lastName: lastName.value,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
+        username: username.value
       });
       signupSucess.value = true;
     } catch (error) {

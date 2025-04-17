@@ -80,7 +80,8 @@ const email = ref('');
 const password = ref('');
 const emailError = ref('');
 const passwordError = ref('');
-const isLoading = ref(false)
+const isLoading = ref(false);
+
 
 async function handleSubmit(){
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
