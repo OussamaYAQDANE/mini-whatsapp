@@ -12,7 +12,8 @@
           "
         >
           <loading-spinner v-if="isLoading" />
-          <img v-else
+          <img
+            v-else
             src="../assets/logo.png"
             style="
               width: 50px;
@@ -26,7 +27,13 @@
         <div style="width: 100%; display: flex; justify-content: center">
           <img
             :src="imageInputSrc ? imageInputSrc : defaultProfile"
-            style="width: 30%; border-radius: 50%; aspect-ratio: 1; object-fit: cover; object-position: center top;"
+            style="
+              width: 30%;
+              border-radius: 50%;
+              aspect-ratio: 1;
+              object-fit: cover;
+              object-position: center top;
+            "
           />
         </div>
         <label class="form-label mt-2">Upload Your Profile Photo</label>
@@ -34,17 +41,25 @@
           type="file"
           class="form-control"
           ref="imageInputRef"
-          @change="displayUploadedProfile(); fileError = ''"
+          @change="
+            displayUploadedProfile();
+            fileError = '';
+          "
           aria-errormessage="file-error"
         />
         <small id="file-error" class="text-danger">
-              {{ fileError ||" &nbsp;" }}</small
-            >
-          <div style="display: flex; flex-direction: column;">
-            <label class="form-label">Add a Bio</label>  
-            <textarea class="form-control" id="bigTextarea" rows="5" placeholder="Pour your bio out here..." v-model="bio"></textarea>
-          </div>
-        
+          {{ fileError || " &nbsp;" }}</small
+        >
+        <div style="display: flex; flex-direction: column">
+          <label class="form-label">Add a Bio</label>
+          <textarea
+            class="form-control"
+            id="bigTextarea"
+            rows="5"
+            placeholder="Pour your bio out here..."
+            v-model="bio"
+          ></textarea>
+        </div>
 
         <div class="row mt-4">
           <div class="col d-grid">
@@ -57,13 +72,15 @@
             </button>
           </div>
           <div class="col-6 d-grid">
-            <button class="btn btn-primary" @click="uploadProfile()">Save and Continue</button>
+            <button class="btn btn-primary" @click="uploadProfile()">
+              Save and Continue
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-<!---------------------------------------------------------------------------------------------------------------------->
+  <!---------------------------------------------------------------------------------------------------------------------->
   <div class="login-container" v-else>
     <div class="card shadow-lg m-2">
       <div class="card-body pe-4 ps-4 pb-4 pt-3">
@@ -76,8 +93,9 @@
             margin-bottom: 10px;
           "
         >
-        <loading-spinner v-if="isLoading" />
-          <img v-else
+          <loading-spinner v-if="isLoading" />
+          <img
+            v-else
             src="../assets/logo.png"
             style="
               width: 50px;
@@ -86,7 +104,6 @@
               justify-self: center;
             "
           />
-          
         </div>
 
         <h2 class="card-title text-center mb-4">Sign Up</h2>
@@ -126,7 +143,7 @@
               </div>
             </div>
           </div>
-          <label  class="form-label">Username</label>
+          <label class="form-label">Username</label>
           <div class="input-group">
             <span class="input-group-text">@</span>
             <input
@@ -136,13 +153,12 @@
               aria-errormessage="username-error"
               @input="usernameError = ''"
             />
-            
           </div>
           <div>
-              <small id="username-error" class="text-danger">{{
-                usernameError || " &nbsp;"
-              }}</small>
-            </div>
+            <small id="username-error" class="text-danger">{{
+              usernameError || " &nbsp;"
+            }}</small>
+          </div>
 
           <div class="">
             <label for="email" class="form-label">Email</label>
@@ -210,10 +226,25 @@
 <script setup>
 /* eslint-disable */
 import { auth, db } from "@/firebase/firebase-config";
-import { connectAuthEmulator, createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc, serverTimestamp, query, collection, where, getDocs } from "firebase/firestore";
-import { storage } from "@/firebase/firebase-config"
-import { uploadBytesResumable, getDownloadURL, ref as storageRef } from "firebase/storage";
+import {
+  connectAuthEmulator,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import {
+  setDoc,
+  doc,
+  serverTimestamp,
+  query,
+  collection,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { storage } from "@/firebase/firebase-config";
+import {
+  uploadBytesResumable,
+  getDownloadURL,
+  ref as storageRef,
+} from "firebase/storage";
 import { ref } from "vue";
 import router from "@/router";
 import defaultProfile from "../assets/default-profile.png";
@@ -238,15 +269,14 @@ const passwordConfirmationError = ref("");
 
 const signupSucess = ref(false);
 
-const isLoading = ref(false)
+const isLoading = ref(false);
 
-const bio = ref('');
+const bio = ref("");
 
-const username = ref('');
-const usernameError = ref('');
+const username = ref("");
+const usernameError = ref("");
 
 async function handleSubmit() {
-
   const emailRegex =
     /^[a-zA-Z0-9][a-zA-Z0-9._%+-]*[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/;
 
@@ -281,25 +311,28 @@ async function handleSubmit() {
     passwordConfirmationError.value = "Passwords don't match";
     correct = false;
   }
-  const username_regex = /^[a-zA-Z0-9_]+$/
+  const username_regex = /^[a-zA-Z0-9_]+$/;
 
-  if (!username.value || !username_regex.test(username.value)){
-    usernameError.value = 'Please choose a valid username';
+  if (!username.value || !username_regex.test(username.value)) {
+    usernameError.value = "Please choose a valid username";
     correct = false;
   }
 
   if (correct) {
     isLoading.value = true;
-    const q = query(collection(db, "users"), where("username", "==", username.value))
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", username.value)
+    );
     const usernames = await getDocs(q);
     console.log(usernames);
-    if (!usernames.empty){
+    if (!usernames.empty) {
       usernameError.value = "Username already taken";
       isLoading.value = false;
 
       return;
     }
-  
+
     try {
       const userCredentials = await createUserWithEmailAndPassword(
         auth,
@@ -313,7 +346,7 @@ async function handleSubmit() {
         firstName: firstName.value,
         lastName: lastName.value,
         createdAt: serverTimestamp(),
-        username: username.value
+        username: username.value,
       });
       signupSucess.value = true;
     } catch (error) {
@@ -328,14 +361,14 @@ async function handleSubmit() {
       } else {
         console.log("💀 Unknown signup error:", errorCode);
       }
-    } finally{
+    } finally {
       isLoading.value = false;
     }
   }
 }
 
 function displayUploadedProfile() {
-  const file = imageInputRef.value.files[0]
+  const file = imageInputRef.value.files[0];
 
   if (file) {
     const reader = new FileReader();
@@ -348,40 +381,51 @@ function displayUploadedProfile() {
   }
 }
 
-async function uploadProfile(){
-  try
+async function uploadProfile() {
+  try {
+    isLoading.value = true;
+    const file = imageInputRef.value.files[0];
 
-  {isLoading.value = true;
-  const file = imageInputRef.value.files[0];
-
-  if (!file) {fileError.value = 'No file selected'; return}
-
-  const imageRef = storageRef(storage, `${auth.currentUser.uid}/images/${new Date().toISOString() + file.name}`);
-
-  const uploadTask = uploadBytesResumable(imageRef, file);
-
-  uploadTask.on('state_changed', 
-    ()=>{},
-    ()=>{fileError.value = 'An error occured, try again'; isLoading.value = false}, 
-    async ()=>{
-      try{
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        await setDoc(doc(db, "users", auth.currentUser.uid), {profilePic: downloadURL, bio: bio.value}, {merge:true});
-        router.replace('/');
-      } catch (error){
-        console.log(error);
-        fileError.value = 'An error occured, try again'
-      } finally {
-        isLoading.value = false;
-      }
+    if (!file) {
+      fileError.value = "No file selected";
+      return;
     }
-    
-  );}
-  catch (error){
+
+    const imageRef = storageRef(
+      storage,
+      `${auth.currentUser.uid}/images/${new Date().toISOString() + file.name}`
+    );
+
+    const uploadTask = uploadBytesResumable(imageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      () => {},
+      () => {
+        fileError.value = "An error occured, try again";
+        isLoading.value = false;
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          await setDoc(
+            doc(db, "users", auth.currentUser.uid),
+            { profilePic: downloadURL, bio: bio.value },
+            { merge: true }
+          );
+          router.replace("/");
+        } catch (error) {
+          console.log(error);
+          fileError.value = "An error occured, try again";
+        } finally {
+          isLoading.value = false;
+        }
+      }
+    );
+  } catch (error) {
     console.log(error);
     isLoading.value = false;
   }
-
 }
 </script>
   
@@ -479,8 +523,8 @@ p.text-primary {
   background-color: #495057;
   color: #ffffff;
 }
-.bio::placeholder{
+.bio::placeholder {
   position: absolute;
-  top: 10px
+  top: 10px;
 }
 </style>
