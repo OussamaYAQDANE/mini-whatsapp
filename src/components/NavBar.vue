@@ -57,14 +57,6 @@
 
 
 
-
-
-
-
-
-
-
-
 <script setup>
 import { defineProps } from "vue";
 import DefaultProfile from "@/assets/default-profile.png";
@@ -72,8 +64,8 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase-config";
 const props = defineProps({
   profilePic: String,
-  modelValue: String,
 });
+
 </script>
     
     
