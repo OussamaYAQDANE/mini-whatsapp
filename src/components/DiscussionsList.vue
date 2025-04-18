@@ -1,30 +1,34 @@
 <template>
   <div id="list">
     
-    <div class="discussion-div" :class="{selected: selected == i}"  v-for="(discussion, i) in discussions" :key="i" @click="selectDiscussion(i)">
+    <div class="discussion-div" :class="{selected: selected == i}"  v-for="(discussion, i) in discussions" :key="i" @click="selectDiscussion(i, discussion.id)">
         <discussion-div :discussion="discussion"  />
     </div>
+    
     
   </div>
 </template>
 
 <script setup>
 /* eslint-disable */
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import DiscussionDiv from './DiscussionDiv.vue';
 import { getMyDiscussions } from '@/utilities/composable';
-import { auth } from '@/firebase/firebase-config';
 
+
+const selectedDiscussion = inject('selectedDiscussion');
 const selected = ref(0);
-function selectDiscussion(index){
+function selectDiscussion(index, id){
     selected.value = index;
+    selectedDiscussion.value = id;
+    
 }
 const discussions = ref([])
 
 async function loadDiscussions(){
-    discussions.value = await getMyDiscussions()
-    console.log(auth.currentUser.uid);
-    console.log(discussions.value);
+  discussions.value = await getMyDiscussions();
+  selectedDiscussion.value = discussions.value[0].id? discussions.value[0].id: ''
+ 
 }
 
 loadDiscussions()
