@@ -62,15 +62,14 @@ const messages = ref([]);
 
 watch(discussionId,() => {
     isLoading.value = true;
-    messages.value = []
-    console.log(discussionId.value);
+    messages.value = [];
   if (discussionId.value) {
     const q = query(
       collection(db, "discussions", discussionId.value, "messages"),
       orderBy("time")
     );
-    const unsubscribe = onSnapshot(q,async (snapshot)=>{
-        console.log("once");
+    const unsubscribe = onSnapshot(q, (snapshot)=>{
+        onUnmounted(unsubscribe)
     if (snapshot.metadata.hasPendingWrites) return;
     snapshot.docChanges().forEach(change =>{
         const doc = change.doc.data();
@@ -87,7 +86,7 @@ watch(discussionId,() => {
     })
     isLoading.value = false;
    
-    onUnmounted(unsubscribe)
+    
 })
   }
 });
