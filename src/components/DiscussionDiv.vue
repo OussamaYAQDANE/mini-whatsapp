@@ -40,7 +40,7 @@
         <span class="date">{{ getTimeAgo(props.discussion.lastMessage.time)   }}</span>
       </div>
       <p class="ms-2" style="color: #b3cad5; font-size: 0.95em">
-        {{ discussion.lastMessage.content }}
+        {{ ((discussion.lastMessage.sender == auth.currentUser.uid ? 'You': discussion.lastName)) + ': ' + discussion.lastMessage.content }}
       </p>
     </div>
   
@@ -53,6 +53,7 @@ import { defineProps } from 'vue';
 import defaultProfile from "@/assets/default-profile.png"
 import LoadingSpinner from "@/components/LoadingSpinner.vue"
 import getTimeAgo from '@/utilities/relativeTime';
+import { auth } from '@/firebase/firebase-config';
 const props = defineProps({
     discussion: Object
 })

@@ -53,7 +53,7 @@ import LoadingSpinner from "./LoadingSpinner.vue";
 import { onSnapshot, query, orderBy, collection } from "firebase/firestore";
 import {db} from "@/firebase/firebase-config"
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 const toSendMessage = ref('');
 
 const discussionId = inject('selectedDiscussion');

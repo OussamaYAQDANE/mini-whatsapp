@@ -52,9 +52,9 @@ const unsubscribe = onSnapshot(q, async(snapshot)=>{
     })
 
     discussions.value = temp;
-
+  
     if (done) return;
-    selectedDiscussion.value = discussions.value[0].id? discussions.value[0].id: '';
+    selectedDiscussion.value = discussions.value[0]? discussions.value[0].id: '';
     done = true;
   });
 
@@ -70,7 +70,6 @@ onUnmounted(unsubscribe)
     position: relative;
     flex-direction: column;
     scrollbar-width: thin;
-    
     overflow: auto;
     height: 100%;
     scrollbar-color: #fff rgb(45, 45, 45);
