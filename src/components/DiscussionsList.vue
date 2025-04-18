@@ -1,7 +1,7 @@
 <template>
   <div id="list">
     
-    <div class="discussion-div" :class="{selected: selected == i}"  v-for="(discussion, i) in discussions" :key="i" @click="selectDiscussion(i, discussion.id)">
+    <div class="discussion-div" :class="{selected: selected == i}"  v-for="discussion, i in discussions" :key="i" @click="selectDiscussion(i, discussion.id)">
         <discussion-div :discussion="discussion"  />
     </div>
     
@@ -14,7 +14,8 @@
 import { ref, inject } from 'vue';
 import DiscussionDiv from './DiscussionDiv.vue';
 import { getMyDiscussions } from '@/utilities/composable';
-
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '@/firebase/firebase-config';
 
 const selectedDiscussion = inject('selectedDiscussion');
 const selected = ref(0);
@@ -28,7 +29,7 @@ const discussions = ref([])
 async function loadDiscussions(){
   discussions.value = await getMyDiscussions();
   selectedDiscussion.value = discussions.value[0].id? discussions.value[0].id: ''
- 
+  
 }
 
 loadDiscussions()

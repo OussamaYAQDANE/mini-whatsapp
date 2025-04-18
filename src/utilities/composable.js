@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { doc, getDoc, getDocs, collection, where, query, arrayUnion, arrayRemove, serverTimestamp, orderBy, limit } from "firebase/firestore"
+import { doc, getDoc, updateDoc, getDocs, collection, where, query, arrayUnion, arrayRemove, serverTimestamp, orderBy, limit, addDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/firebase-config"
 
 
@@ -10,7 +10,7 @@ async function getUserById(uid){
 }
 
 async function getMyDiscussions(){
-    const q = query(collection(db, "discussions"), where("couple", "array-contains", auth.currentUser.uid), orderBy("lastMessage.time"));
+    const q = query(collection(db, "discussions"), where("couple", "array-contains", auth.currentUser.uid), orderBy("lastMessage.time", "desc"));
     const discussionsSnapshot = await getDocs(q);
     
     const discussions = [];
@@ -57,7 +57,7 @@ async function getMyGroups(){
 }
 
 async function getDiscussionMessages(discussionId){
-    const q = query(collection(db, "discussions", discussionId, "messages"), orderBy("time"));
+    const q = query(collection(db, "discussions", discussionId, "messages"), orderBy("time", "desc"));
     const snapShot = await getDocs(q);
     const messages = [];
     snapShot.forEach(doc => {
@@ -90,4 +90,15 @@ function formatChatTimestamp(date) {
     }
 }
 
-export {getMyGroups, getUserById, getMyDiscussions, getDiscussionMessages, formatChatTimestamp}
+function sendDiscussionMessage(discussionId, message) {
+    const toSend = {
+        sender: auth.currentUser.uid,
+        content: message,
+        time: serverTimestamp()
+    }
+    addDoc(collection(db, "discussions", discussionId, "messages"), toSend);
+
+    updateDoc(doc(db, "discussions", discussionId), {lastMessage: toSend})
+}
+
+export {getMyGroups, getUserById, getMyDiscussions, getDiscussionMessages, formatChatTimestamp, sendDiscussionMessage}
