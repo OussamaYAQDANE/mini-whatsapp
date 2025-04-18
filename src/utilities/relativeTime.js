@@ -1,5 +1,5 @@
 function getTimeAgo(timestamp) {
-  const now = new Date(new Date().getTime() + 3600*1000)
+  const now = new Date(new Date().getTime())
   const date = timestamp.toDate(); // Convert Firestore Timestamp to JS Date
   //const date = new Date(timestamp)
 

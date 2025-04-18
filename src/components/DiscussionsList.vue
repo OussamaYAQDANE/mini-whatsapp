@@ -1,7 +1,7 @@
 <template>
   <div id="list">
     
-    <div class="discussion-div" :class="{selected: selected == i}"  v-for="(discussion, i) in discussions" :key="i" @click="selectDiscussion(i, discussion.id)">
+    <div class="discussion-div" :class="{selected: selectedDiscussion == discussion.id}"  v-for="discussion in discussions" :key="discussion.id" @click="selectDiscussion(discussion.id)">
         <discussion-div :discussion="discussion"  />
     </div>
     
@@ -11,29 +11,56 @@
 
 <script setup>
 /* eslint-disable */
-import { ref, inject } from 'vue';
+import { ref, inject, onUnmounted } from 'vue';
 import DiscussionDiv from './DiscussionDiv.vue';
-import { getMyDiscussions } from '@/utilities/composable';
-
+import {getUserById } from '@/utilities/composable';
+import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore';
+import { db, auth } from '@/firebase/firebase-config';
 
 const selectedDiscussion = inject('selectedDiscussion');
-const selected = ref(0);
-function selectDiscussion(index, id){
-    selected.value = index;
+
+function selectDiscussion(id){
     selectedDiscussion.value = id;
     
 }
 const discussions = ref([])
+let done = false;
 
-async function loadDiscussions(){
-  discussions.value = await getMyDiscussions();
-  selectedDiscussion.value = discussions.value[0].id? discussions.value[0].id: ''
+const q = query(collection(db, "discussions"), where("couple", "array-contains", auth.currentUser.uid), orderBy("lastMessage.time", "desc"));
+const unsubscribe = onSnapshot(q, async(snapshot)=>{
+  if (snapshot.metadata.hasPendingWrites){
+    return
+  }
+
+    const temp = [];
+
+    snapshot.forEach(doc =>{
+        temp.push({id: doc.id, ...doc.data()});
+    })
+
+    let promises = [];
+    temp.forEach((e)=>{
+        let otherUid = auth.currentUser.uid === e.couple[0]? e.couple[1]: e.couple[0];
+        promises.push(getUserById(otherUid));
+    })
+    promises = await Promise.all(promises);
+    
+    promises.forEach((e, i)=>{
+        temp[i]["firstName"] = e.firstName;
+        temp[i]["lastName"] = e.lastName;
+        temp[i]["profilePic"] = e.profilePic;
+    })
+
+    discussions.value = temp;
+
+    if (done) return;
+    selectedDiscussion.value = discussions.value[0].id? discussions.value[0].id: '';
+    done = true;
+  });
+
  
-}
 
-loadDiscussions()
-
-
+onUnmounted(unsubscribe)
 </script>
 
 <style scoped>
