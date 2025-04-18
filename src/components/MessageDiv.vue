@@ -1,6 +1,6 @@
 <template>
   <div class="message_box" :class="message.sender === auth.currentUser.uid ? 'even': 'odd'">
-      <div class="message new">
+      <div class="message" :class="message.new_continue" >
         <p class="message_text">{{ message.content }}</p>
         <div class="d-flex justify-content-end" style="display: flex; justify-content: end; width: 100%;">
             <p class="time">{{ formatChatTimestamp(message.time.toDate()) }}</p>

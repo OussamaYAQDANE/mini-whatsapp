@@ -90,15 +90,16 @@ function formatChatTimestamp(date) {
     }
 }
 
-function sendDiscussionMessage(discussionId, message) {
+async function sendDiscussionMessage(discussionId, message) {
     const toSend = {
         sender: auth.currentUser.uid,
         content: message,
         time: serverTimestamp()
     }
+    updateDoc(doc(db, "discussions", discussionId), {lastMessage: toSend})
     addDoc(collection(db, "discussions", discussionId, "messages"), toSend);
 
-    updateDoc(doc(db, "discussions", discussionId), {lastMessage: toSend})
+    
 }
 
 export {getMyGroups, getUserById, getMyDiscussions, getDiscussionMessages, formatChatTimestamp, sendDiscussionMessage}
