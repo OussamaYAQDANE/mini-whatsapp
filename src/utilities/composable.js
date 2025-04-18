@@ -24,7 +24,6 @@ async function getMyDiscussions(){
         promises.push(getUserById(otherUid));
     })
     promises = await Promise.all(promises);
-    console.log(promises);
     
     promises.forEach((e, i)=>{
         discussions[i]["firstName"] = e.firstName;
@@ -57,9 +56,38 @@ async function getMyGroups(){
     return discussions;
 }
 
-async function getGroupMessages(){
+async function getDiscussionMessages(discussionId){
+    const q = query(collection(db, "discussions", discussionId, "messages"), orderBy("time"));
+    const snapShot = await getDocs(q);
+    const messages = [];
+    snapShot.forEach(doc => {
+        messages.push(doc.data())
+    })
+    return messages;
+}
+function formatChatTimestamp(date) {
+    const now = new Date();
     
+    const sameDay = date.toDateString() === now.toDateString();
 
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday = date.toDateString() === yesterday.toDateString();
+
+    const options = {
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+
+    if (sameDay) {
+        return date.toLocaleTimeString([], options); // e.g. "13:45"
+    } else if (isYesterday) {
+        return `Yesterday, ${date.toLocaleTimeString([], options)}`; // "Yesterday, 13:45"
+    } else if (date.getFullYear() === now.getFullYear()) {
+        return `${date.getDate()}/${date.getMonth() + 1}, ${date.toLocaleTimeString([], options)}`; // e.g. "17/4, 13:45"
+    } else {
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}, ${date.toLocaleTimeString([], options)}`; // e.g. "17/4/2023, 13:45"
+    }
 }
 
-export {getMyGroups, getUserById, getMyDiscussions}
+export {getMyGroups, getUserById, getMyDiscussions, getDiscussionMessages, formatChatTimestamp}
