@@ -4,10 +4,10 @@
       <div id="tabs">
       <span class="tab" :class="selectedTab === 'discussions' ? 'selectedTab': ''" @click="selectedTab = 'discussions'" >Discussions</span>
       <span class="tab" :class="selectedTab === 'groups' ? 'selectedTab': ''" @click="selectedTab = 'groups'">Groups</span></div>
-      <discussions-list style="width: 100%; " />
+      <discussions-list v-show="selectedTab === 'discussions'" style="width: 100%; " />
     </div>
     <div style="width: 100%;">
-      <discussion-messages v-show="selectedDiscussion" />
+      <discussion-messages v-show="selectedTab === 'discussions'" />
     </div>
     
   </div>
@@ -23,9 +23,14 @@ const selectedTab = ref('discussions');
 const selectedDiscussion = ref('');
 const selectedGroup = ref('');
 
+const otherUid = ref('');
+
 provide('selectedDiscussion', selectedDiscussion);
 provide('selectedGroup', selectedGroup);
 
+watch(otherUid, ()=>{
+  
+})
 
 </script>
 
