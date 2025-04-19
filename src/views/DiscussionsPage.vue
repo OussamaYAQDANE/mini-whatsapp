@@ -23,14 +23,13 @@ const selectedTab = ref('discussions');
 const selectedDiscussion = ref('');
 const selectedGroup = ref('');
 
-const otherUid = ref('');
+
 
 provide('selectedDiscussion', selectedDiscussion);
 provide('selectedGroup', selectedGroup);
 
-watch(otherUid, ()=>{
-  
-})
+
+
 
 </script>
 

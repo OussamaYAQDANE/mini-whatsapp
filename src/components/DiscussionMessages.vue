@@ -47,27 +47,32 @@
 <script setup>
 /* eslint-disable */
 import MessageDiv from "./MessageDiv.vue";
-import { ref, inject, watch, onUnmounted, onMounted } from "vue";
+import { ref, inject, watch, onUnmounted, onMounted, watchEffect, computed } from "vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import { onSnapshot, query, orderBy, collection } from "firebase/firestore";
 import {db} from "@/firebase/firebase-config"
+import { sendDiscussionMessage } from "@/utilities/composable";
 
 const isLoading = ref(false);
 const toSendMessage = ref('');
 
 const discussionId = inject('selectedDiscussion');
-
+let unsubscribe = ()=>{};
 const messages = ref([]);
 
-watch(discussionId,() => {
+watchEffect(() => {
+    unsubscribe();
     isLoading.value = true;
     messages.value = [];
   if (discussionId.value) {
-    const q = query(
+    const q = computed(()=>{
+      return query(
       collection(db, "discussions", discussionId.value, "messages"),
       orderBy("time")
     );
-    const unsubscribe = onSnapshot(q, (snapshot)=>{
+    })
+    
+    unsubscribe = onSnapshot(q.value, (snapshot)=>{
         onUnmounted(unsubscribe)
     if (snapshot.metadata.hasPendingWrites) return;
     snapshot.docChanges().forEach(change =>{
