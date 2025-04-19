@@ -135,6 +135,18 @@ function sendDiscussionMessage(discussionId, message) {
   addDoc(collection(db, "discussions", discussionId, "messages"), toSend);
 }
 
+function sendGroupMessage(groupId, message) {
+  const toSend = {
+    sender: auth.currentUser.uid,
+    content: message,
+    time: serverTimestamp(),
+  };
+  updateDoc(doc(db, "groups", groupId), {
+    lastMessage: toSend,
+  });
+  addDoc(collection(db, "groups", groupId, "messages"), toSend);
+}
+
 function makeDiscussionMessagesSeen(discussionId, couple) {
     let myUid = auth.currentUser.uid;
     let otherUid = couple[0] === myUid? couple[1] : couple[0];
@@ -148,5 +160,6 @@ export {
   getDiscussionMessages,
   formatChatTimestamp,
   sendDiscussionMessage,
-  makeDiscussionMessagesSeen
+  makeDiscussionMessagesSeen,
+  sendGroupMessage
 };
