@@ -3,7 +3,7 @@ import LoginPage from "@/views/LoginPage.vue"
 import SignupPage from '@/views/SignupPage.vue'
 import MainPage from '@/views/MainPage.vue'
 import DiscussionsPage from '@/views/DiscussionsPage.vue'
-
+import Search from '@/views/Search.vue'
 
 
 const routes = [
@@ -15,6 +15,10 @@ const routes = [
       {
         path: "",
         component: DiscussionsPage
+      },
+      {
+        path: "search",
+        component: Search,
       }
     ]
   },

@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        
+        OUI ceci est la page de recherche
     </div>
 </template>
 

@@ -18,7 +18,9 @@
       </div>
       <div>
         <!--------------------------------- Router links go here my niggas ------------------------------------>
-        <router-link to="/">LOL</router-link>
+        <router-link to="/">MDR</router-link>
+        <router-link to="/search">Search</router-link>
+        
       </div>
       <div
         class="d-flex actions flex-row-reverse align-items-center"
