@@ -38,6 +38,7 @@ provide('selectedGroup', selectedGroup);
   border-radius: 20px;
   font-size: 0.9em;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .selectedTab{
