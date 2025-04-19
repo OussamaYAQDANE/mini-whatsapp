@@ -6,7 +6,6 @@ import { addGroups } from '@/utilities/createGroups';
 <template>
     <main>
         OUI ceci est la page de recherche...
-        <button @click="addGroups">Click to Add Groups</button>
     </main>
 </template>
 

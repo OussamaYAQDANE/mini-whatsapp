@@ -13,6 +13,43 @@ const [user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user1
 ]
 
 
+const dummy_messages = [
+    [
+    { sender: "user1", content: "Bienvenue !", time: serverTimestamp() },
+    { sender: "user3", content: "Prêt pour commencer ?", time: serverTimestamp() },
+    { sender: "user2", content: "Salut tout le monde !", time: serverTimestamp() },
+  ],[
+    { sender: user4, content: "Quelqu’un pour une partie ?", time: serverTimestamp() },
+    { sender: user5, content: "Toujours prêt !", time: serverTimestamp() },
+    { sender: user4, content: "Let's go alors !", time: serverTimestamp() },
+  ],[
+    { sender: user8, content: "Révisions ce soir ?", time: serverTimestamp() },
+    { sender: user7, content: "Oui, à 20h !", time: serverTimestamp() },
+    { sender: user6, content: "Parfait, je prépare les exos.", time: serverTimestamp() },
+  ],[
+    { sender: user10, content: "Nouveau pitch prêt !", time: serverTimestamp() },
+    { sender: user9, content: "Super ! On le teste demain ?", time: serverTimestamp() },
+    { sender: user10, content: "Oui, 10h sharp !", time: serverTimestamp() },
+  ],[
+    { sender: user13, content: "Nouvelle playlist partagée !", time: serverTimestamp() },
+    { sender: user12, content: "J’adore le son numéro 3 !", time: serverTimestamp() },
+    { sender: user11, content: "On refait ça chaque semaine ?", time: serverTimestamp() },
+  ],[
+    { sender: user2, content: "Prochaine destination ?", time: serverTimestamp() },
+    { sender: user3, content: "Je vote pour le Japon !", time: serverTimestamp() },
+    { sender: user1, content: "Banco, on planifie ça.", time: serverTimestamp() },
+  ],[
+    { sender: user5, content: "On regarde quoi ce soir ?", time: serverTimestamp() },
+    { sender: user4, content: "J’ai téléchargé Inception !", time: serverTimestamp() },
+    { sender: user6, content: "Parfait, pop-corn prêt.", time: serverTimestamp() },
+  ],[
+    { sender: user8, content: "Le match était fou !", time: serverTimestamp() },
+    { sender: user7, content: "Incroyable ce but à la 90e !", time: serverTimestamp() },
+    { sender: user9, content: "On se voit pour le prochain ?", time: serverTimestamp() },
+  ],
+]; 
+let message_counter = 0;
+
 const dummy_groups = [
     {
       icon: "",
@@ -20,11 +57,6 @@ const dummy_groups = [
       members: [user1, user2, user3],
       admins: [user1],
       privacy: "public",
-      messages: [
-        { sender: user1, content: "Bienvenue !", time: serverTimestamp() },
-        { sender: user3, content: "Prêt pour commencer ?", time: serverTimestamp() },
-        { sender: user2, content: "Salut tout le monde !", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Le top du top.",
       lastMessage: {
@@ -39,11 +71,6 @@ const dummy_groups = [
       members: [user4, user5],
       admins: [user5],
       privacy: "private",
-      messages: [
-        { sender: user4, content: "Quelqu’un pour une partie ?", time: serverTimestamp() },
-        { sender: user5, content: "Toujours prêt !", time: serverTimestamp() },
-        { sender: user4, content: "Let's go alors !", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Pour les accros au jeu.",
       lastMessage: {
@@ -58,11 +85,6 @@ const dummy_groups = [
       members: [user6, user7, user8],
       admins: [user6],
       privacy: "public",
-      messages: [
-        { sender: user8, content: "Révisions ce soir ?", time: serverTimestamp() },
-        { sender: user7, content: "Oui, à 20h !", time: serverTimestamp() },
-        { sender: user6, content: "Parfait, je prépare les exos.", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Travaillons ensemble pour réussir.",
       lastMessage: {
@@ -77,11 +99,6 @@ const dummy_groups = [
       members: [user9, user10],
       admins: [user9],
       privacy: "private",
-      messages: [
-        { sender: user10, content: "Nouveau pitch prêt !", time: serverTimestamp() },
-        { sender: user9, content: "Super ! On le teste demain ?", time: serverTimestamp() },
-        { sender: user10, content: "Oui, 10h sharp !", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Entrepreneurs en action.",
       lastMessage: {
@@ -96,11 +113,6 @@ const dummy_groups = [
       members: [user11, user12, user13],
       admins: [user11],
       privacy: "public",
-      messages: [
-        { sender: user13, content: "Nouvelle playlist partagée !", time: serverTimestamp() },
-        { sender: user12, content: "J’adore le son numéro 3 !", time: serverTimestamp() },
-        { sender: user11, content: "On refait ça chaque semaine ?", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Tous styles confondus.",
       lastMessage: {
@@ -115,11 +127,6 @@ const dummy_groups = [
       members: [user1, user2, user3],
       admins: [user1],
       privacy: "private",
-      messages: [
-        { sender: user2, content: "Prochaine destination ?", time: serverTimestamp() },
-        { sender: user3, content: "Je vote pour le Japon !", time: serverTimestamp() },
-        { sender: user1, content: "Banco, on planifie ça.", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Autour du monde ensemble.",
       lastMessage: {
@@ -134,11 +141,6 @@ const dummy_groups = [
       members: [user4, user5, user6],
       admins: [user4],
       privacy: "public",
-      messages: [
-        { sender: user5, content: "On regarde quoi ce soir ?", time: serverTimestamp() },
-        { sender: user4, content: "J’ai téléchargé Inception !", time: serverTimestamp() },
-        { sender: user6, content: "Parfait, pop-corn prêt.", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Films & popcorn garantis.",
       lastMessage: {
@@ -153,11 +155,6 @@ const dummy_groups = [
       members: [user7, user8, user9],
       admins: [user7],
       privacy: "public",
-      messages: [
-        { sender: user8, content: "Le match était fou !", time: serverTimestamp() },
-        { sender: user7, content: "Incroyable ce but à la 90e !", time: serverTimestamp() },
-        { sender: user9, content: "On se voit pour le prochain ?", time: serverTimestamp() },
-      ],
       createdAt: serverTimestamp(),
       description: "Foot, stats et débats.",
       lastMessage: {
@@ -167,13 +164,24 @@ const dummy_groups = [
       },
     },
   ];
+
+
   
   const database_groups = collection(db, "groups");
 
   async function addGroups(){
+
     for (let group of dummy_groups){
-        await addDoc(database_groups, group);
+        let cst = await addDoc(database_groups, group);
+        let target = collection(db, "groups", cst.id, "messages");
+        let current_messages = dummy_messages[message_counter];
+
+        for (let message_ of current_messages){
+            addDoc(target, message_);
+        }
+        message_counter += 1;
     }
+    console.log("groups created")
   }
 
   export {addGroups}

@@ -51,6 +51,7 @@ import { ref, inject, watch, onUnmounted, onMounted } from "vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import { onSnapshot, query, orderBy, collection } from "firebase/firestore";
 import {db} from "@/firebase/firebase-config"
+import { sendDiscussionMessage } from "@/utilities/composable";
 
 const isLoading = ref(false);
 const toSendMessage = ref('');
