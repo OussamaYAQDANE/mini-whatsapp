@@ -4,7 +4,13 @@ import { doc, getDoc, getDocs, collection, where, query, arrayUnion, arrayRemove
 import { auth, db } from "../firebase/firebase-config"
 
 const discussionId = "bty9cI9nbuDIJ0uIoTqE"
-const otherUid = "utJz0lMHMafunmT1Ubu3lNaFW7Y2"
+const other1Uid = "utJz0lMHMafunmT1Ubu3lNaFW7Y2"
+const otherUid = "W3bIxhIPLGQuwZDOYIcXaf7JxiP2"
+
+// oussama : xhjGQahe6TM0DMKgm347aAU6Ih72
+
+// adam : W3bIxhIPLGQuwZDOYIcXaf7JxiP2
+
 
 const messages = [
     {

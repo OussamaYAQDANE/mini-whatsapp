@@ -46,9 +46,8 @@
 
 <script setup>
 /* eslint-disable */
-import { getDiscussionMessages, sendDiscussionMessage } from "@/utilities/composable";
 import MessageDiv from "./MessageDiv.vue";
-import { ref, inject, watch, nextTick, onUnmounted, watchEffect } from "vue";
+import { ref, inject, watch, onUnmounted, onMounted } from "vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import { onSnapshot, query, orderBy, collection } from "firebase/firestore";
 import {db} from "@/firebase/firebase-config"
@@ -90,6 +89,10 @@ watch(discussionId,() => {
 })
   }
 });
+
+onMounted(()=>{
+  
+})
 </script>
 
 <style scoped>

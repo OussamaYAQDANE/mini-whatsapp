@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { doc, getDoc, updateDoc, getDocs, collection, where, query, arrayUnion, arrayRemove, serverTimestamp, orderBy, limit, addDoc, setDoc } from "firebase/firestore"
+import { doc, getDoc, updateDoc, getDocs, collection, where, query, arrayUnion, arrayRemove, serverTimestamp, orderBy, limit, addDoc, setDoc, increment } from "firebase/firestore"
 import { auth, db } from "../firebase/firebase-config"
 
 
@@ -90,16 +90,19 @@ function formatChatTimestamp(date) {
     }
 }
 
-async function sendDiscussionMessage(discussionId, message) {
+function sendDiscussionMessage(discussionId, message) {
     const toSend = {
         sender: auth.currentUser.uid,
         content: message,
         time: serverTimestamp()
     }
-    updateDoc(doc(db, "discussions", discussionId), {lastMessage: toSend})
+    updateDoc(doc(db, "discussions", discussionId), {lastMessage: toSend, [auth.currentUser.uid]: increment(1)});
     addDoc(collection(db, "discussions", discussionId, "messages"), toSend);
 
-    
+}
+
+function makeDiscussionMessagesSeen(selectedDiscussion, otherUid){
+    updateDoc(doc(db, "discussions", selectedDiscussion), {[otherUid]: 0})
 }
 
 export {getMyGroups, getUserById, getMyDiscussions, getDiscussionMessages, formatChatTimestamp, sendDiscussionMessage}
