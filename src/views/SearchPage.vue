@@ -5,7 +5,21 @@ import { addGroups } from '@/utilities/createGroups';
 
 <template>
     <main>
-        OUI ceci est la page de recherche...
+        <div class="searchDiv">
+            <div class="search">
+                <input type="text">
+                <span>🔎</span>
+            </div>
+            <div class="type">
+                <div class="groupes"></div>
+                <div class="people"></div>
+            </div>
+        </div>
+
+        <div class="display">
+            
+        </div>
+
     </main>
 </template>
 
