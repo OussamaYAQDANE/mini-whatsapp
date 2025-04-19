@@ -73,6 +73,7 @@ defineProps({
   color: hsl(199, 27%, 90%);
   margin-bottom: 1px;
   overflow: hidden;
+  font-size: 0.93em;
 }
 
 .message_box {
@@ -122,7 +123,7 @@ defineProps({
 }
 
 .fullname{
-  color: white;
+  color: hsl(0, 0%, 88%);
   font-size: 0.9em;
   font-weight: bold;
   line-height: 1.1;
@@ -133,6 +134,9 @@ defineProps({
   line-height: 1;
 }
 
+.sender-div{
+    margin-bottom: 4px;
+}
 .sender-div:hover{
     cursor: pointer;
     
