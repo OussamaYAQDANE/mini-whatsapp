@@ -18,9 +18,9 @@
       v-else
       class="container m-0 text-light d-flex flex-row pb-0"
       style="cursor: pointer; align-items: center; justify-content: space-between;"
-      
+      @click="count = 0"
     >
-    <div class="d-flex flex-column mb-3">
+    <div class="d-flex flex-column mb-3" >
       <div class="d-flex align-items-center mt-2">
         <div class="me-2 p-1">
           <img
@@ -39,7 +39,7 @@
         </div>
         <span class="author">{{ discussion.firstName +' ' + discussion.lastName }}</span>
         <span style="color: #86a2ae" class="m-1">•</span>
-        <span class="date">{{ props.discussion.lastMessage? getTimeAgo(props.discussion.lastMessage.time):''   }}</span>
+        <span class="date">{{ props.discussion.lastMessage.time? getTimeAgo(props.discussion.lastMessage.time):''   }}</span>
       </div>
       <p class="ms-2 " style="color: #b3cad5; font-size: 0.95em;">
         {{ props.discussion.lastMessage? ((discussion.lastMessage.sender == auth.currentUser.uid ? 'You': discussion.lastName)) + ': ' + discussion.lastMessage.content : '' }}
@@ -57,7 +57,7 @@
     
 <script setup>
 /* eslint-disable */
-import { ref } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { defineProps } from 'vue';
 import defaultProfile from "@/assets/default-profile.png"
 import LoadingSpinner from "@/components/LoadingSpinner.vue"
@@ -74,10 +74,13 @@ function getNewMessagesCount(){
   if (count <10) return count;
   return '+9';
 }
+
+
+
 </script>
     
     
-    <style scoped>
+<style scoped>
 .overlay {
   background-color: rgba(255, 255, 255, 0.1);
 }
@@ -101,12 +104,14 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0 !important;
+  word-break: break-all;
 }
 
 .new-messages{
   background-color: rgb(139, 21, 174);
   width: 30px;
   height: 30px;
+  aspect-ratio: 1/1;
   justify-content: center;
   align-items: center;
 }
