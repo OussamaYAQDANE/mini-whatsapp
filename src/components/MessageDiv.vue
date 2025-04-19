@@ -16,7 +16,7 @@ import { auth } from '@/firebase/firebase-config';
 import { formatChatTimestamp } from '@/utilities/composable';
 defineProps({
     message: Object
-})
+});
 </script>
 
 <style scoped>
@@ -31,6 +31,8 @@ defineProps({
   border-radius: 10px;
   height: fit-content;
   position: relative;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .time {
   font-size: 12px;
@@ -43,6 +45,7 @@ defineProps({
 
   color: hsl(199, 27%, 90%);
   margin-bottom: 1px;
+  overflow: hidden;
 }
 
 .message_box {
