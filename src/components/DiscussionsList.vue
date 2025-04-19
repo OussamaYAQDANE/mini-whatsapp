@@ -4,7 +4,7 @@
     
     <loading-spinner v-show="!done" />
     
-    <div class="discussion-div" :class="{selected: selectedDiscussion == discussion.id}"  v-for="discussion in discussions" :key="discussion.id" @click="selectDiscussion(discussion.id)">
+    <div class="discussion-div" :class="{selected: selectedDiscussion == discussion.id}"  v-for="discussion in discussions" :key="discussion.id" @click="selectDiscussion(discussion.id); makeDiscussionMessagesSeen(discussion.id, discussion.couple)">
         <discussion-div :discussion="discussion"  />
     </div>
     
@@ -15,13 +15,13 @@
 /* eslint-disable */
 import { ref, inject, onUnmounted } from 'vue';
 import DiscussionDiv from './DiscussionDiv.vue';
-import {getUserById } from '@/utilities/composable';
+import {getUserById, makeDiscussionMessagesSeen } from '@/utilities/composable';
 import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore';
 import { db, auth } from '@/firebase/firebase-config';
 import LoadingSpinner from './LoadingSpinner.vue';
 
 const selectedDiscussion = inject('selectedDiscussion');
-// const groupsOrDiscussions = inject('groupsOrDiscussions');
+
 
 function selectDiscussion(id){
     selectedDiscussion.value = id;
@@ -57,7 +57,6 @@ const unsubscribe = onSnapshot(q, async(snapshot)=>{
     })
 
     discussions.value = temp;
-    console.log(temp);
     if (done.value) return;
     selectedDiscussion.value = discussions.value[0]? discussions.value[0].id: '';
     done.value = true;
