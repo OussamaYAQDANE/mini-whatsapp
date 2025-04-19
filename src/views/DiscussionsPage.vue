@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex;  height: 100%; width: 100%">
-    <div style="height: 100; width: 40%; border-right: 0.1px solid #86a2ae;">
-      <!-- <div id="tabs">
-      <span class="tab selectedTab"   >Discussions</span>
-      <span class="tab" @click="groupsOrDiscussions = 'groups'">Groups</span></div> -->
+    <div style="height: 100; width: 40%; border-right: 0.1px solid #86a2ae; display: flex; flex-direction: column;">
+      <div id="tabs">
+      <span class="tab" :class="selectedTab === 'discussions' ? 'selectedTab': ''" @click="selectedTab = 'discussions'" >Discussions</span>
+      <span class="tab" :class="selectedTab === 'groups' ? 'selectedTab': ''" @click="selectedTab = 'groups'">Groups</span></div>
       <discussions-list style="width: 100%; " />
     </div>
     <div style="width: 100%;">
@@ -19,13 +19,13 @@ import DiscussionsList from "@/components/DiscussionsList.vue";
 import DiscussionMessages from "@/components/DiscussionMessages.vue";
 import { ref, provide, watch } from "vue";
 
-const groupsOrDiscussions = ref('discussions');
+const selectedTab = ref('discussions');
 const selectedDiscussion = ref('');
 const selectedGroup = ref('');
 
 provide('selectedDiscussion', selectedDiscussion);
 provide('selectedGroup', selectedGroup);
-provide('groupsOrDiscussions', groupsOrDiscussions);
+
 
 </script>
 
