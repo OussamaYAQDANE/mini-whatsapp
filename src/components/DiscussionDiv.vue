@@ -16,9 +16,11 @@
     </div>
     <div
       v-else
-      class="container m-0 text-light d-flex flex-column pb-3"
-      style="cursor: pointer"
+      class="container m-0 text-light d-flex flex-row pb-0"
+      style="cursor: pointer; align-items: center; justify-content: space-between;"
+      
     >
+    <div class="d-flex flex-column mb-3">
       <div class="d-flex align-items-center mt-2">
         <div class="me-2 p-1">
           <img
@@ -37,11 +39,18 @@
         </div>
         <span class="author">{{ discussion.firstName +' ' + discussion.lastName }}</span>
         <span style="color: #86a2ae" class="m-1">•</span>
-        <span class="date">{{ getTimeAgo(props.discussion.lastMessage.time)   }}</span>
+        <span class="date">{{ props.discussion.lastMessage? getTimeAgo(props.discussion.lastMessage.time):''   }}</span>
       </div>
-      <p class="ms-2" style="color: #b3cad5; font-size: 0.95em">
-        {{ ((discussion.lastMessage.sender == auth.currentUser.uid ? 'You': discussion.lastName)) + ': ' + discussion.lastMessage.content }}
+      <p class="ms-2 " style="color: #b3cad5; font-size: 0.95em;">
+        {{ props.discussion.lastMessage? ((discussion.lastMessage.sender == auth.currentUser.uid ? 'You': discussion.lastName)) + ': ' + discussion.lastMessage.content : '' }}
       </p>
+    </div>
+    <div v-if="props.discussion[otherUid]" class="new-messages" style="border-radius: 50%; display: flex; ">
+      <span>{{getNewMessagesCount()}}</span>
+    </div>
+      
+
+      
     </div>
   
 </template>
@@ -58,7 +67,13 @@ const props = defineProps({
     discussion: Object
 })
 
-const isLoading = ref(false)
+const isLoading = ref(false);
+const otherUid = props.discussion.couple[0] === auth.currentUser.uid ? props.discussion.couple[1]: props.discussion.couple[0];
+function getNewMessagesCount(){
+  const count = props.discussion[otherUid];
+  if (count <10) return count;
+  return '+9';
+}
 </script>
     
     
@@ -86,6 +101,14 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0 !important;
+}
+
+.new-messages{
+  background-color: rgb(139, 21, 174);
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>

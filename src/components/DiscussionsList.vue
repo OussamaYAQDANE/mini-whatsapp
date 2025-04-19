@@ -27,6 +27,7 @@ function selectDiscussion(id){
     selectedDiscussion.value = id;
     
 }
+
 const discussions = ref([])
 let done = ref(false);
 
@@ -56,7 +57,7 @@ const unsubscribe = onSnapshot(q, async(snapshot)=>{
     })
 
     discussions.value = temp;
-  
+    console.log(temp);
     if (done.value) return;
     selectedDiscussion.value = discussions.value[0]? discussions.value[0].id: '';
     done.value = true;
