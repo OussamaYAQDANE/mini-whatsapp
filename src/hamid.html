@@ -5,6 +5,18 @@
     <title>Document</title>
 </head>
 <body>
-    qzz
+    
 </body>
 </html>
+<div>
+        
+    <div class="add-user-form">
+        <form @submit.prevent="add_user">
+        <input
+            type="text"
+            v-model="user_to_add"
+            placeholder="Add a user by username"
+            class="add-user-input"
+        >
+        </form>
+    </div>
