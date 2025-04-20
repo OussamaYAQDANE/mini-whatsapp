@@ -45,11 +45,12 @@
         <label for="groupIcon" class="form-label">Group Icon</label>
         <input 
           type="file" 
-          class="form-control" 
+          class="form-control " 
           id="groupIcon"
           accept="image/*"
           @change="handleIconUpload"
           ref="iconInput"
+          style="color: #86a2ae;"
         >
       </div>
 
