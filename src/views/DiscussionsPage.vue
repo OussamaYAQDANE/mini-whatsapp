@@ -5,9 +5,11 @@
       <span class="tab" :class="selectedTab === 'discussions' ? 'selectedTab': ''" @click="selectedTab = 'discussions'" >Discussions</span>
       <span class="tab" :class="selectedTab === 'groups' ? 'selectedTab': ''" @click="selectedTab = 'groups'">Groups</span></div>
       <discussions-list v-show="selectedTab === 'discussions'" style="width: 100%; " />
+      <groups-list v-show="selectedTab === 'groups'" style="width: 100%; " />
     </div>
     <div style="width: 100%;">
       <discussion-messages v-show="selectedTab === 'discussions'" />
+      <group-messages v-show="selectedTab === 'groups'" />
     </div>
     
   </div>
@@ -16,7 +18,9 @@
 <script setup>
 /* eslint-disable */
 import DiscussionsList from "@/components/DiscussionsList.vue";
+import GroupsList from "@/components/GroupsList.vue";
 import DiscussionMessages from "@/components/DiscussionMessages.vue";
+import GroupMessages from "@/components/GroupMessages.vue";
 import { ref, provide, watch } from "vue";
 
 const selectedTab = ref('discussions');
