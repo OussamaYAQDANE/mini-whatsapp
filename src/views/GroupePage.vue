@@ -3,7 +3,7 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import defaultProfil from '@/assets/default-profile.png';
 import defaultGroupProfil from '@/assets/default-prfl.png'
 import {ref, onMounted, computed} from 'vue';
-import {getDoc, doc, updateDoc, arrayUnion, arrayRemove, query, collection, where, getDocs} from 'firebase/firestore';
+import {getDoc, doc, updateDoc, arrayUnion, arrayRemove, query, collection, where, getDocs, onSnapshot} from 'firebase/firestore';
 import {db} from '@/firebase/firebase-config.js'
 import { useRoute } from 'vue-router';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -18,32 +18,38 @@ const docs = ref([]);
 const users = ref([]);
 let newUsername = ref('');
 
-onMounted(async () => {
+onMounted(() => {
   isLoading.value = true;
-  const temp = [];
   const docRef = doc(db, 'groups', search_for);
-  const docSnap = await getDoc(docRef);
-  docs.value = docSnap.data();
+  onSnapshot(docRef, async (docSnap) => {
+    if (docSnap.exists()) {
+      docs.value = docSnap.data();
+      await loadUsers();
+    }
+    isLoading.value = false;
+  });
+  loadUsers();
+});
 
-  users.value = [];  
-  for (const userId of docs.value.members) {
+async function loadUsers() {
+  const temp = [];
+  
+  for (const userId of docs.value.members || []) {
     const userDocRef = doc(db, 'users', userId);
     const userProfil = getDoc(userDocRef).then(
-        userData=> {
-          return {
-            uid: userData.id,
-            ...userData.data(),
-          }
-        }
-        );
+      userData => {
+        return {
+          uid: userData.id,
+          ...userData.data(),
+        };
+      }
+    );
     temp.push(userProfil);
   }
-    
+
   const aa = await Promise.all(temp);
-  
   users.value = aa;
-  isLoading.value = false;
-});
+}
 const currentUser = ref('');
 onAuthStateChanged(auth, (user)=>{
   if (user) currentUser.value = user;
