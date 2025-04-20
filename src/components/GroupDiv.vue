@@ -51,7 +51,7 @@
       <p class="ms-2" style="color: #b3cad5; font-size: 0.95em">
         {{
           props.group.lastMessage
-            ? (group.lastMessage.sender == auth.currentUser.uid ? "You:" : "") +
+            ? (group.lastMessage.sender == auth.currentUser.uid ? "You: " : "") +
               group.lastMessage.content
             : ""
         }}
