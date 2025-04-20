@@ -19,7 +19,9 @@
           "
           alt=""
         />
-        <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: column"
+        @click="$router.push(`/profile/${message.sender}`)"
+        >
           <span class="fullname">{{ message.fullName }}</span>
           <span class="username">{{
             message.username ? '@'+message.username : ""
