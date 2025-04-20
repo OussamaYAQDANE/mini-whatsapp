@@ -3,12 +3,12 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import defaultProfil from '@/assets/default-profile.png';
 import defaultGroupProfil from '@/assets/default-prfl.png'
 import {ref, onMounted, computed} from 'vue';
-import {getDoc, doc, updateDoc, arrayUnion, arrayRemove, query, collection, where, getDocs, onSnapshot} from 'firebase/firestore';
+import {getDoc, doc, updateDoc, arrayUnion, arrayRemove, query, collection, where, getDocs, onSnapshot, addDoc} from 'firebase/firestore';
 import {db} from '@/firebase/firebase-config.js'
 import { useRoute } from 'vue-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import {auth} from '@/firebase/firebase-config.js'
-import { sendGroupMessage } from '@/utilities/composable';
+import { serverTimestamp } from 'firebase/firestore';
 
 
 
@@ -97,7 +97,24 @@ async function addUserByUsername() {
   }
   newUsername.value = ''
 }
-
+async function sendGroupMessage(groupId, message) {
+  const toSend = {
+    sender: auth.currentUser.uid,
+    content: message,
+    time: serverTimestamp(),
+  };
+  const docref = doc(db, "groups", groupId);
+  const docSnap = await getDoc(docref);
+  updateDoc(docref, {
+    lastMessage: toSend,
+  });
+  addDoc(collection(db, "groups", groupId, "messages"), toSend);
+  if (!docSnap.data().members.includes(currentUser.value.uid)){
+    updateDoc(docref, {
+      members: arrayUnion(currentUser.value.uid)
+    })
+  }
+}
 </script>
 <template>
     <div
