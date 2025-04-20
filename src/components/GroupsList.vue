@@ -1,7 +1,7 @@
 <template>
   <div id="list">
     <loading-spinner v-show="!done" />
-    <button class="btn btn-primary mb-2" style="align-self: center; max-width: max-content; justify-self: end;">Create a new group</button>
+    <button class="btn btn-primary mb-2" @click="openModal = true" style="align-self: center; max-width: max-content; justify-self: end;">Create a new group</button>
     <div
       class="discussion-div"
       :class="{ selected: selectedGroup == group.id }"
@@ -37,6 +37,8 @@ const selectedGroup = inject("selectedGroup");
 function selectGroup(id) {
   selectedGroup.value = id;
 }
+
+const openModal = inject('openModal')
 
 const groups = ref([]);
 let done = ref(false);
