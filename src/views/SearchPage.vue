@@ -4,8 +4,8 @@ import GroupCard from '@/components/GroupCard.vue';
 import UserCard from '@/components/UserCard.vue';
 import { ref, onMounted, computed } from 'vue';
 import { db } from '@/firebase/firebase-config';
-import { where,collection, getDocs } from 'firebase/firestore';
-import { addGroups } from '@/utilities/createGroups';
+import { collection, getDocs } from 'firebase/firestore';
+
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const groupSelected = ref(false);
@@ -34,7 +34,7 @@ result_of_Search = computed(()=>{
     let res = [];
     if (groupSelected.value){
         res = groups.value.filter((x)=>{
-            return (x.title.toLowerCase().includes(input.value.toLowerCase()))
+            return ( x.privacy ==='public' && x.title.toLowerCase().includes(input.value.toLowerCase()))
         })
     }
     else if (userSelected.value){
@@ -64,14 +64,23 @@ result_of_Search = computed(()=>{
                 <span class="material-icons input-group-text" style="background-color: purple; color: white; font-size: 25px;">search</span>
             </div>
             <div class="type">
-                <div class="groupes" @click="switchToGroups" :class="[groupSelected ? 'selected' : '']">Groupes</div>
                 <div class="people" @click="switchToUsers" :class="[userSelected ? 'selected' : '']">Users</div>
+                <div class="groupes" @click="switchToGroups" :class="[groupSelected ? 'selected' : '']">Groupes</div>
+                
             </div>
         </div>
         <LoadingSpinner class="Spinner" v-if="Loading"/>
         <div class="display" v-else>
-            <GroupCard v-if="groupSelected" v-for="x in result_of_Search" :group="x" :key="x.id" />
-            <UserCard v-if="userSelected" v-for="x in result_of_Search" :user="x" :key="x.id" />
+            <div class="display" v-if="groupSelected">
+                <GroupCard  v-for="x in result_of_Search" :group="x" :key="x.id" />
+                
+            </div>
+
+            <div class="display" v-if="userSelected">
+                <UserCard  v-for="x in result_of_Search" :user="x" :key="x.id" />
+            </div>
+            
+            
         </div>
         
     </main>
@@ -93,6 +102,7 @@ main {
     color: aliceblue;
     padding: 2rem;
     font-family: 'Segoe UI', sans-serif;
+    
 }
 
 .searchDiv {
@@ -101,6 +111,7 @@ main {
     align-items: center;
     gap: 1rem;
     width: 100%;
+    
 }
 
 .input-group {

@@ -1,7 +1,7 @@
 <script setup>
     import { defineProps } from 'vue';
     import { useRouter } from 'vue-router';
-    defineProps({
+    const props = defineProps({
         group : {
             type: Object,
         }
@@ -9,7 +9,7 @@
     import defaultProfile from "@/assets/default-profile.png";
     const router = useRouter();
     const goToGroupPage = () =>{
-        router.push('/')
+        router.push(`group/${props.group.id}`)
     }
 </script>
 
