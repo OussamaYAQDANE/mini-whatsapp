@@ -37,10 +37,13 @@
             alt=""
           />
         </div>
-        <span class="author">{{ discussion.firstName +' ' + discussion.lastName }}</span>
+        <div id="hha" @click="$router.push(`/profile/${otherUid}`)">
+          <span class="author">{{ discussion.firstName +' ' + discussion.lastName }}</span>
         <span style="color: #86a2ae" class="m-1">•</span>
         <span class="date">{{ props.discussion.lastMessage.time? getTimeAgo(props.discussion.lastMessage.time):''   }}</span>
-      </div>
+     
+        </div>
+         </div>
       <p class="ms-2 " style="color: #b3cad5; font-size: 0.95em;">
         {{ props.discussion.lastMessage? ((discussion.lastMessage.sender == auth.currentUser.uid ? 'You': discussion.lastName)) + ': ' + discussion.lastMessage.content : '' }}
       </p>
@@ -85,6 +88,9 @@ function getNewMessagesCount(){
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+#hha:hover span{
+  text-decoration: underline;
+}
 .author {
   color: #b3cad5;
   font-weight: bold;

@@ -1,7 +1,7 @@
 <script setup>
 /* eslint-disable */
-import { db } from '@/firebase/firebase-config';
-import { getDoc, doc } from 'firebase/firestore';
+import { db, auth } from '@/firebase/firebase-config';
+import { getDoc, doc, collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { ref } from 'vue'
 import { useRoute } from 'vue-router';
 import defaultProfile from '@/assets/default-profile.png'
@@ -11,102 +11,140 @@ const route = useRoute();
 const target = route.params.id;
 const user = ref({})
 const isLoading = ref(false)
+const showMessageForm = ref(false)
+const messageContent = ref('')
+const isSending = ref(false)
+const sendMessageAppear = ref(true);
 
 async function loadProfile() {
     isLoading.value = true;
     const SnapDoc = await getDoc(doc(db, "users", target));
-    user.value = SnapDoc.data()
+    user.value = SnapDoc.data();
+    const q = query(collection(db, "discussions"), where("couple", "array-contains", auth.currentUser.uid));
+
+
+    if (target === auth.currentUser.uid) {
+        sendMessageAppear.value = false;
+    }
+    else {
+        const snapshot = await getDocs(q)
+        snapshot.docs.forEach(doc =>{
+            if (doc.data().couple.includes(target)){
+                console.log(doc.data().couple, target);
+                sendMessageAppear.value = false;
+
+            }
+
+        })
+    }
+    console.log(sendMessageAppear.value);
     isLoading.value = false
 }
+
+async function sendMessage() {
+    if (!messageContent.value.trim()) return
+
+    try {
+        isSending.value = true
+        const s = await addDoc(collection(db, "discussions"), {
+            couple: [target, auth.currentUser.uid],
+            time: serverTimestamp(),
+            lastMessage: {
+                sender: auth.currentUser.uid,
+                content: messageContent.value.trim(),
+                time: serverTimestamp()
+            }
+        })
+        await addDoc(collection(db, "discussions", s.id, "messages"), {
+            sender: auth.currentUser.uid,
+            content: messageContent.value,
+            time: serverTimestamp()
+        });
+
+        messageContent.value = ''
+        showMessageForm.value = false
+        alert('Message sent successfully!')
+    } catch (error) {
+        console.error('Error sending message:', error)
+        alert('Error sending message. Please try again.')
+    } finally {
+        isSending.value = false
+    }
+}
+
 loadProfile()
 </script>
+
 <template>
-    <div v-if="isLoading" style="display: flex; width: 100%; height: 100%; justify-content: center; align-items: center;">
+    <div v-if="isLoading" class="d-flex w-100 h-100 justify-content-center align-items-center">
         <loading-spinner />
     </div>
-    <div v-else class="profile-container">
-        <div class="profile-header">
-            <img :src="user.profilePic ? user.profilePic : defaultProfile" :alt="`${user.firstName}'s profile picture`"
-                class="profile-pic">
-            <div class="profile-info">
-                <h1 class="name">{{ user.firstName }} {{ user.lastName }}</h1>
-                <p class="username">@{{ user.username }}</p>
-            </div>
-        </div>
+    <div v-else class="container mt-5">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center">
+                        <img :src="user.profilePic || defaultProfile" :alt="`${user.firstName}'s profile picture`"
+                            class="img-fluid rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-9">
+                        <h1 class="card-title mb-1 text-light">{{ user.firstName }} {{ user.lastName }}</h1>
+                        <p class="text-muted mb-3">@{{ user.username }}</p>
+                        <button @click="showMessageForm = !showMessageForm" class="btn btn-primary"
+                            v-if="auth.currentUser && sendMessageAppear">
+                            {{ showMessageForm ? 'Cancel' : 'Send Message' }}
+                        </button>
+                    </div>
+                </div>
 
-        <div class="bio-section">
-            <h2 class="section-title">About Me</h2>
-            <p class="bio-content">{{ user.bio }}</p>
+                <div v-if="showMessageForm" class="mt-4">
+                    <form @submit.prevent="sendMessage">
+                        <div class="mb-3">
+                            <textarea v-model="messageContent" class="form-control text-light" placeholder="Type your message..." rows="3"
+                                :disabled="isSending"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success" :disabled="isSending || !messageContent.trim()">
+                            <span v-if="isSending" class="spinner-border spinner-border-sm" role="status"></span>
+                            {{ isSending ? 'Sending...' : 'Send Message' }}
+                        </button>
+                    </form>
+                </div>
+
+                <div class="text-light" v-if="user.bio">
+                    <h3 class="mb-1">About Me</h3>
+                    <p  style="white-space: pre-wrap; color:beige">{{ user.bio }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.profile-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #fff;
+.card {
     border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
 }
 
-.profile-header {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
+.form-control{
+    color:#f8f9fa
 }
 
-.profile-pic {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #f0f0f0;
+.rounded-circle {
+    border: 4px solid #f8f9fa;
 }
 
-.profile-info .name {
-    font-size: 2rem;
-    margin: 0;
-    color: #2c3e50;
+.btn-primary {
+    padding: 8px 20px;
+    border-radius: 20px;
 }
 
-.profile-info .username {
-    font-size: 1.2rem;
-    color: #7f8c8d;
-    margin: 0.5rem 0 0;
-}
-
-.bio-section {
-    padding: 1.5rem;
-    background-color: #f8f9fa;
+textarea {
+    resize: none;
     border-radius: 10px;
 }
 
-.section-title {
-    font-size: 1.5rem;
-    color: #34495e;
-    margin: 0 0 1rem;
-}
-
-.bio-content {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #4a5568;
-    margin: 0;
-    white-space: pre-wrap;
-}
-
-@media (max-width: 768px) {
-    .profile-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .profile-pic {
-        width: 120px;
-        height: 120px;
-    }
+.text-muted {
+    color: #6c757d !important;
 }
 </style>
