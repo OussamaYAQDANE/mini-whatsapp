@@ -50,7 +50,7 @@
     background-color: #2a2a3b;
     border: 1px solid #7c3aed;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 1rem;
     transition: 0.3s ease;
     width: 300px;
     color: white;
@@ -61,7 +61,8 @@
 
 .lightInfos{
     display: flex;
-    flex-direction: row;   
+    flex-direction: row;  
+    align-items: center; 
 }
 
 .lightInfos .infos{
@@ -74,16 +75,24 @@
 }
 
 .lightInfos .infos .username{
-    font-size: smaller;
+    
     font-weight: lighter;
+    font-size: 0.75em;
+  color: hsl(0, 0%, 80%);
+  line-height: 1;
 }
 
 .lightInfos .infos .fullname{
-    font-weight: bolder;
+    color: hsl(0, 0%, 88%);
+  font-size: 0.9em;
+  font-weight: bold;
+  line-height: 1.1;
 }
 
 .bio{
-    padding: 3px;
+ 
+    line-height: 1;
+    font-size: 0.85em;
 }
 
 .userCard:hover {

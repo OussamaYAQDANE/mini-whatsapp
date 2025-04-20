@@ -93,6 +93,7 @@ main {
     color: aliceblue;
     padding: 2rem;
     font-family: 'Segoe UI', sans-serif;
+    
 }
 
 .searchDiv {
@@ -101,6 +102,7 @@ main {
     align-items: center;
     gap: 1rem;
     width: 100%;
+    
 }
 
 .input-group {
