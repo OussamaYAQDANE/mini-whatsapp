@@ -7,6 +7,7 @@
       <div
         class="navbar-brand d-flex align-items-center me-5"
         style="color: white; width: fit-content; font-weight: bold"
+        
       >
         <img
           src="../assets/logo.png"
@@ -18,7 +19,7 @@
       </div>
       <div class="nav-links d-flex gap-3 me-4">
         <router-link to="/" exact-active-class="active-link" class="nav-link"
-          >MDR</router-link
+          >Messaging</router-link
         >
         <router-link
           to="/search"
@@ -26,9 +27,7 @@
           class="nav-link"
           >Search</router-link
         >
-        <router-link :to="`/profile/${auth.currentUser.uid}`" exact-active-class="active-link" class="nav-link"
-          >Profile</router-link
-        >
+        
       </div>
       <div
         class="d-flex actions flex-row-reverse align-items-center"
@@ -36,7 +35,9 @@
       >
         <div
           class="d-flex align-items-center justify-content-center me-2 p-1 img-div"
-          style="border-radius: 50%"
+          style="border-radius: 50%; cursor: pointer;"
+          @click="$router.push(`/profile/${auth.currentUser.uid}`)"
+
         >
           <img
             :src="props.profilePic ? profilePic : DefaultProfile"
