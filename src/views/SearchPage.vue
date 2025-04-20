@@ -9,7 +9,7 @@ import { addGroups } from '@/utilities/createGroups';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const groupSelected = ref(false);
-const userSelected = ref(false);
+const userSelected = ref(true);
 const input = ref("");
 let Loading = ref(true)
 let result_of_Search = ref([]);
