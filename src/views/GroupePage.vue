@@ -161,7 +161,7 @@ async function sendGroupMessage(groupId, message) {
       />
       <p style="color: whitesmoke; font-size: 4em">{{ docs.title }}</p>
       <div style="width: 70%">
-        <p style="display: flex; color: whitesmoke">
+        <p style="display: flex; color: whitesmoke; justify-content: center;">
           {{ docs.description }}
         </p>
       </div>
