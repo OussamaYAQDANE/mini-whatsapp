@@ -4,7 +4,7 @@ import SignupPage from '@/views/SignupPage.vue'
 import MainPage from '@/views/MainPage.vue'
 import DiscussionsPage from '@/views/DiscussionsPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
-
+import GroupePage from '@/views/GroupePage.vue'
 
 const routes = [
   {
@@ -19,6 +19,11 @@ const routes = [
       {
         path: "search",
         component: SearchPage,
+      },
+      {
+        path: 'group/:title',
+        component: GroupePage,
+        name: 'groupPage'
       }
     ]
   },
