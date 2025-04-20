@@ -34,12 +34,14 @@ result_of_Search = computed(()=>{
     let res = [];
     if (groupSelected.value){
         res = groups.value.filter((x)=>{
-            return (x.title.includes(input.value))
+            return (x.title.toLowerCase().includes(input.value.toLowerCase()))
         })
     }
     else if (userSelected.value){
         res = users.value.filter((x)=>{
-            return (x.firstName.includes(input.value))
+            return (x.username?.toLowerCase().includes(input.value.toLowerCase())) ||
+             (x.firstName.toLowerCase().includes(input.value.toLowerCase())) ||
+             (x.lastName.toLowerCase().includes(input.value.toLowerCase())) 
         })
     }
     return res;
