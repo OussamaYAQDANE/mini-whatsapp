@@ -8,6 +8,7 @@ import {db} from '@/firebase/firebase-config.js'
 import { useRoute } from 'vue-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import {auth} from '@/firebase/firebase-config.js'
+import { sendGroupMessage } from '@/utilities/composable';
 
 
 
@@ -17,6 +18,7 @@ let isLoading = ref(false);
 const docs = ref([]);
 const users = ref([]);
 let newUsername = ref('');
+let newMessage = ref('');
 
 onMounted(() => {
   isLoading.value = true;
@@ -30,6 +32,7 @@ onMounted(() => {
   });
   loadUsers();
 });
+
 
 async function loadUsers() {
   const temp = [];
@@ -73,6 +76,7 @@ async function kickUser(user){
   })
 }
 async function addUserByUsername() {
+  if(!newUsername.value) return;
   const q = query(collection(db, 'users'), where('username','==',newUsername.value))
   const docRef2 = doc(db, 'groups', search_for);
   const docsnap2 = await getDoc(docRef2);  
@@ -127,12 +131,19 @@ async function addUserByUsername() {
             <h2 style="display: flex; justify-content: flex-end; color: whitesmoke">{{ docs.description }}</h2>
         </div>
         <div>
+          <form @submit.prevent="sendGroupMessage(search_for, newMessage)" class="add-user-form">
+            <input 
+              type="text" 
+              v-model="newMessage" 
+              placeholder="Send message" 
+            />
+          </form>
+          <br>
           <form v-if="isAdmin" @submit.prevent="addUserByUsername" class="add-user-form">
             <input 
               type="text" 
               v-model="newUsername" 
               placeholder="Enter the username to add" 
-              required
             />
           </form>
           <div class="user-list">
@@ -149,9 +160,11 @@ async function addUserByUsername() {
                       </span>
             
                   </p>
-                  
-                  <div v-if="isAdmin" class="actions">
-                    <button @click="promoteToAdmin(user)">Promote to Admin</button>
+                  <div v-if="user.uid == currentUser.uid" class="actions">
+                    <button @click="kickUser(currentUser)">Quit</button>
+                  </div>
+                  <div v-if="isAdmin && user.uid!=currentUser.uid" class="actions">
+                    <button v-if="!docs.admins.includes(user.uid)" @click="promoteToAdmin(user)">Promote to Admin</button>
                     <button @click="kickUser(user)">Kick</button>
                   </div>
                 </div>
@@ -173,7 +186,7 @@ async function addUserByUsername() {
 }
 
 .add-user-form input {
-  padding: 8px;
+  padding: 14px;
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -189,9 +202,6 @@ async function addUserByUsername() {
   align-items: center;
 }
 
-
-
-/* Each user item */
 .user-item {
   margin-bottom: 15px;
   padding: 10px;
@@ -203,12 +213,11 @@ async function addUserByUsername() {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .scrollable-list {
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
   list-style: none;
   width: 100%;
 }
-/* Profile picture */
 .user-item img {
   width: 40px;
   height: 40px;
@@ -216,7 +225,6 @@ async function addUserByUsername() {
   object-fit: cover;
 }
 
-/* Username and buttons wrapper */
 .user-info {
   display: flex;
   align-items: center;
@@ -224,7 +232,6 @@ async function addUserByUsername() {
   width: 100%;
 }
 
-/* Username text */
 .user-info p {
   margin: 0;
   font-weight: bold;
@@ -233,7 +240,7 @@ async function addUserByUsername() {
   padding-left: 10px;
 }
 
-/* Buttons area */
+
 .actions {
   display: flex;
   gap: 10px;
