@@ -37,7 +37,8 @@
             alt=""
           />
         </div>
-        <router-link class="author" :to="{ name: 'groupPage', params: { id: group.id, title: group.title } }">
+        <router-link class="author" 
+        :to="{ name: 'groupPage', params: { id: group.id, title: group.title } }">
   {{ group.title }}
 </router-link>
         <span style="color: #86a2ae" class="m-1">•</span>
