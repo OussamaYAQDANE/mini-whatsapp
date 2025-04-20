@@ -2,13 +2,15 @@
 /* eslint-disable */
 import { db, auth } from '@/firebase/firebase-config';
 import { getDoc, doc, collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router';
 import defaultProfile from '@/assets/default-profile.png'
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const route = useRoute();
-const target = route.params.id;
+const target = computed(()=>{
+    return route.params.id;
+})
 const user = ref({})
 const isLoading = ref(false)
 const showMessageForm = ref(false)
@@ -18,19 +20,19 @@ const sendMessageAppear = ref(true);
 
 async function loadProfile() {
     isLoading.value = true;
-    const SnapDoc = await getDoc(doc(db, "users", target));
+    const SnapDoc = await getDoc(doc(db, "users", target.value));
     user.value = SnapDoc.data();
     const q = query(collection(db, "discussions"), where("couple", "array-contains", auth.currentUser.uid));
 
 
-    if (target === auth.currentUser.uid) {
+    if (target.value === auth.currentUser.uid) {
         sendMessageAppear.value = false;
     }
     else {
         const snapshot = await getDocs(q)
         snapshot.docs.forEach(doc =>{
-            if (doc.data().couple.includes(target)){
-                console.log(doc.data().couple, target);
+            if (doc.data().couple.includes(target.value)){
+                console.log(doc.data().couple, target.value);
                 sendMessageAppear.value = false;
 
             }
@@ -47,7 +49,7 @@ async function sendMessage() {
     try {
         isSending.value = true
         const s = await addDoc(collection(db, "discussions"), {
-            couple: [target, auth.currentUser.uid],
+            couple: [target.value, auth.currentUser.uid],
             time: serverTimestamp(),
             lastMessage: {
                 sender: auth.currentUser.uid,

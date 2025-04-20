@@ -38,7 +38,7 @@
                 <p class="username">@{{ user.username ? user.username : ""}}</p>
             </div>
         </div>
-        <div class="bio mt-2">{{ user.bio }}</div>
+        <div class="bio mt-2"><p>{{ user.bio }}</p></div>
 
     </div>
 </template>
@@ -99,5 +99,15 @@
     background-color: #3a3a4f;
     transform: scale(1.02);
     cursor: pointer;
+}
+p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 </style>
