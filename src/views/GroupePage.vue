@@ -1,4 +1,5 @@
 <script setup>
+/* eslint-disable */
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import defaultProfil from '@/assets/default-profile.png';
 import defaultGroupProfil from '@/assets/default-prfl.png'
@@ -7,35 +8,13 @@ import {getDoc, doc} from 'firebase/firestore';
 import {db} from '@/firebase/firebase-config.js'
 import { useRoute } from 'vue-router';
 
-
-
 const route  = useRoute();
 const search_for = route.params.id;
 let isLoading = ref(false);
 const docs = ref([]);
 const users = ref([]);
-onMounted(async () => {
-  isLoading.value = true;
 
-  const docRef = doc(db, 'groups', search_for);
-  const docSnap = await getDoc(docRef);
-  docs.value = docSnap.data();
 
-  users.value = []; 
-  
-
-  for (const userId of docs.value.members) {
-    const docRef2 = doc(db, 'users', userId);
-    users.value.push(getDoc(docRef2))
-  }
-  users.value = await Promise.all(temp)
-
-  isLoading.value = false;
-});
-  let user_to_add = ref('');
-  function add_user(){
-
-  }
 </script>
 <template>
     <div
