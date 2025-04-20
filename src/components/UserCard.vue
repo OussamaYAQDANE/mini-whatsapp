@@ -11,7 +11,7 @@
   })
   import defaultProfile from "@/assets/default-profile.png";
   const goToUserPage = ()=>{
-    router.push('/');
+    router.push(`/profile/${user.id}`);
   }
 </script>
 

@@ -145,7 +145,10 @@ async function sendGroupMessage(groupId, message) {
             "
             >
             <p style="color: whitesmoke; font-size: 4em;">{{ docs.title }}</p>
-            <h2 style="display: flex; justify-content: flex-end; color: whitesmoke">{{ docs.description }}</h2>
+            <div style="width: 70%;">
+              <p style="display: flex; justify-content: flex-end; color: whitesmoke">{{ docs.description }}</p>
+
+            </div>
         </div>
         <div>
           <form @submit.prevent="sendGroupMessage(search_for, newMessage)" class="add-user-form">
@@ -156,12 +159,18 @@ async function sendGroupMessage(groupId, message) {
             />
           </form>
           <br>
-          <form v-if="isAdmin" @submit.prevent="addUserByUsername" class="add-user-form">
+          <form v-if="isAdmin" @submit.prevent="addUserByUsername" class="add-user-form ">
+            <div class="input-group" style="max-width: 600px;">
+              <span class="input-group-text">@</span>
             <input 
+              class="form-control"
               type="text" 
               v-model="newUsername" 
               placeholder="Enter the username to add" 
             />
+            </div>
+            
+            
           </form>
           <div class="user-list">
             <ul class="scrollable-list ">
@@ -228,6 +237,9 @@ async function sendGroupMessage(groupId, message) {
   align-items: center;
   gap: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.form-control::placeholder{
+  color: #ccc;
 }
 .scrollable-list {
   max-height: 300px;

@@ -24,7 +24,6 @@ const routes = [
       {
         path: 'group/:id',
         component: GroupePage,
-
         name: 'groupPage'
       },
       {
