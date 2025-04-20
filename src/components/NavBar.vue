@@ -16,11 +16,16 @@
         />
         OUSSAMA
       </div>
-      <div>
-        <!--------------------------------- Router links go here my niggas ------------------------------------>
-        <router-link to="/">MDR</router-link>
-        <router-link to="/search">Search</router-link>
-        
+      <div class="nav-links d-flex gap-3 me-4">
+        <router-link to="/" exact-active-class="active-link" class="nav-link"
+          >MDR</router-link
+        >
+        <router-link
+          to="/search"
+          exact-active-class="active-link"
+          class="nav-link"
+          >Search</router-link
+        >
       </div>
       <div
         class="d-flex actions flex-row-reverse align-items-center"
@@ -48,7 +53,7 @@
           style="border-radius: 25px; font-size: 16px; margin-right: 12px"
           @click="signOut(auth)"
         >
-          <i class="material-icons" style="font-size: 28px" >logout</i> Logout
+          <i class="material-icons" style="font-size: 28px">logout</i> Logout
         </div>
       </div>
     </div>
@@ -67,7 +72,6 @@ import { auth } from "@/firebase/firebase-config";
 const props = defineProps({
   profilePic: String,
 });
-
 </script>
     
     
@@ -110,4 +114,36 @@ img {
 .haha:hover {
   background-color: rgba(255, 0, 0, 0.8);
 }
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  position: relative;
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.nav-link:hover {
+  color: #ccccccb7;
+
+}
+
+.active-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: rgb(155, 85, 202);
+  border-radius: 1px;
+  transition: 0.3s ease;
+  
+}
+
+.nav-link:hover::after {
+  transform: scaleX(0.5);
+}
+
+
 </style>
