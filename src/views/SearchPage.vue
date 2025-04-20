@@ -2,33 +2,55 @@
 /* eslint-disable */
 import GroupCard from '@/components/GroupCard.vue';
 import UserCard from '@/components/UserCard.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { db } from '@/firebase/firebase-config';
-import { collection, getDocs } from 'firebase/firestore';
+import { where,collection, getDocs } from 'firebase/firestore';
 import { addGroups } from '@/utilities/createGroups';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
-const groupSelected = ref(true);
+const groupSelected = ref(false);
 const userSelected = ref(false);
 const input = ref("");
 let Loading = ref(true)
-const result_of_Search = ref([]);
+let result_of_Search = ref([]);
+const groups = ref([]);
+const users = ref([]);
 
 const switchToGroups = () => {groupSelected.value = true; userSelected.value = false;}
 const switchToUsers = () => {groupSelected.value = false; userSelected.value = true;}
 
 onMounted(async () => {
-    const snapShot = await getDocs(collection(db, "users"));
-    result_of_Search.value = snapShot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log(result_of_Search);
+    const [userSnap,groupSnap] = await Promise.all([
+        getDocs(collection(db, "users")), getDocs(collection(db, "groups")) ]) 
+
+    users.value = userSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    groups.value = groupSnap.docs.map(doc => ({id:doc.id, ...doc.data()}))
+
     Loading.value = false;
 })
 
-onMounted(async ()=>{
-    const snaptShot = await getDocs(collection(db, "groups"))
-    result_of_Search.value = snaptShot.docs.map(doc => ({id:doc.id, ...doc.data()}))
-    Loading.value = false;
+
+result_of_Search = computed(()=>{
+    let res = [];
+    if (groupSelected.value){
+        res = groups.value.filter((x)=>{
+            return (x.title.includes(input.value))
+        })
+    }
+    else if (userSelected.value){
+        res = users.value.filter((x)=>{
+            return (x.firstName.includes(input.value))
+        })
+    }
+    return res;
 })
+
+
+// const q = query(
+//     collection(db, "users"),
+//     where("userName", ">=" , input.value ),
+//     where("userName", "<=" , input.value + '\uf8ff')
+// )
 
 </script>
 
@@ -40,15 +62,14 @@ onMounted(async ()=>{
                 <span class="material-icons input-group-text" style="background-color: purple; color: white; font-size: 25px;">search</span>
             </div>
             <div class="type">
-                <div class="groupes" @click="switchToGroups">Groupes</div>
-                <div class="people" @click="switchToUsers">Users</div>
+                <div class="groupes" @click="switchToGroups" :class="[groupSelected ? 'selected' : '']">Groupes</div>
+                <div class="people" @click="switchToUsers" :class="[userSelected ? 'selected' : '']">Users</div>
             </div>
         </div>
-        <LoadingSpinner v-if="Loading"/>
+        <LoadingSpinner class="Spinner" v-if="Loading"/>
         <div class="display" v-else>
             <GroupCard v-if="groupSelected" v-for="x in result_of_Search" :group="x" :key="x.id" />
             <UserCard v-if="userSelected" v-for="x in result_of_Search" :user="x" :key="x.id" />
-            
         </div>
         
     </main>
@@ -57,6 +78,15 @@ onMounted(async ()=>{
 
 
 <style scoped>
+
+.selected{
+    background-color: #7c3aed !important;
+}
+
+.Spinner{
+    margin-top: 20px;
+}
+
 main {
     color: aliceblue;
     padding: 2rem;

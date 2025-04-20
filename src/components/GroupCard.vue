@@ -1,16 +1,37 @@
 <script setup>
     import { defineProps } from 'vue';
+    import { useRouter } from 'vue-router';
     defineProps({
         group : {
             type: Object,
         }
     })
+    import defaultProfile from "@/assets/default-profile.png";
+    const router = useRouter();
+    const goToGroupPage = () =>{
+        router.push('/')
+    }
 </script>
 
 <template>
-    <div class="groupCard">
-       <p>title : {{ group.title }}</p> 
-       <p>description : {{ group.description }}</p>
+    <div class="groupCard" @click="goToGroupPage">
+        <div class="lightInfos">
+            <p>
+                <img
+                    :src="group.icon ? group.icon : defaultProfile"
+                    alt="img"
+                    style="
+                        width: 45px;
+                        height :45px;
+                        border-radius: 50%;
+                    "
+                    >
+            </p>
+            <p class="infos m-lg-2">{{ group.title }}</p>
+        </div>
+        <div class="bio">
+            <p>{{ group.description }}</p>
+        </div>
     </div>
 </template>
 
@@ -26,6 +47,22 @@
     transition: 0.3s ease;
     width: 40%;
     color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.lightInfos{
+    display: flex;
+    flex-direction: row;   
+}
+
+.lightInfos .infos{
+    width: 70%;
+}
+
+.lightInfos .infos{
+    width: 70%;
+    font-weight: bolder;
 }
 
 .groupCard:hover {
