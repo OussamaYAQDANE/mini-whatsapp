@@ -46,6 +46,7 @@ defineProps({
   color: hsl(199, 27%, 90%);
   margin-bottom: 1px;
   overflow: hidden;
+  font-size: 0.93em;
 }
 
 .message_box {
