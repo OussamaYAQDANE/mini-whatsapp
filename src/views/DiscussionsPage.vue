@@ -50,7 +50,7 @@ provide('selectedGroup', selectedGroup);
 }
 
 .selectedTab{
-  background-color: rgb(81, 0, 106);
+  background-color: rgba(163, 9, 210, 0.752);
   color: rgb(243, 205, 255);
 }
 

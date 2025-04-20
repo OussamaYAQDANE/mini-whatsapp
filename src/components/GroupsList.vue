@@ -1,7 +1,7 @@
 <template>
   <div id="list">
     <loading-spinner v-show="!done" />
-
+    <button class="btn btn-primary mb-2" style="align-self: center; max-width: max-content; justify-self: end;">Create a new group</button>
     <div
       class="discussion-div"
       :class="{ selected: selectedGroup == group.id }"
@@ -11,7 +11,10 @@
     >
       <group-div :group="group" />
     </div>
+    
+    
   </div>
+
 </template>
   
   <script setup>
