@@ -146,7 +146,6 @@ function sendGroupMessage(groupId, message) {
   });
   addDoc(collection(db, "groups", groupId, "messages"), toSend);
 }
-
 function makeDiscussionMessagesSeen(discussionId, couple) {
     let myUid = auth.currentUser.uid;
     let otherUid = couple[0] === myUid? couple[1] : couple[0];

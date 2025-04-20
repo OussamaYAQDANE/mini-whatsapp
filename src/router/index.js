@@ -21,9 +21,9 @@ const routes = [
         component: SearchPage,
       },
       {
-        path: 'group/:title',
+        path: 'group/:id',
         component: GroupePage,
-        name: 'groupPage'
+        name: 'groupPage',
       }
     ]
   },
