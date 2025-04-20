@@ -26,6 +26,9 @@
           class="nav-link"
           >Search</router-link
         >
+        <router-link :to="`/profile/${auth.currentUser.uid}`" exact-active-class="active-link" class="nav-link"
+          >Profile</router-link
+        >
       </div>
       <div
         class="d-flex actions flex-row-reverse align-items-center"

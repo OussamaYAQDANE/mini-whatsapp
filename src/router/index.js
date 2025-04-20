@@ -5,6 +5,7 @@ import MainPage from '@/views/MainPage.vue'
 import DiscussionsPage from '@/views/DiscussionsPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import GroupePage from '@/views/GroupePage.vue'
+import ProfilePage from '@/views/ProfilePage.vue'
 
 const routes = [
   {
@@ -24,6 +25,10 @@ const routes = [
         path: 'group/:title',
         component: GroupePage,
         name: 'groupPage'
+      },
+      {
+        path: 'profile/:id',
+        component: ProfilePage,
       }
     ]
   },
