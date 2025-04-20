@@ -161,7 +161,7 @@ async function sendGroupMessage(groupId, message) {
       />
       <p style="color: whitesmoke; font-size: 4em">{{ docs.title }}</p>
       <div style="width: 70%">
-        <p style="display: flex; justify-content: flex-end; color: whitesmoke">
+        <p style="display: flex; color: whitesmoke">
           {{ docs.description }}
         </p>
       </div>
@@ -172,11 +172,12 @@ async function sendGroupMessage(groupId, message) {
         class="add-user-form"
       >
         <input
-          class="form-control"
+          class="form-control text-light"
           type="text"
           v-model="newMessage"
           placeholder="Send message"
           style="max-width: 600px"
+
         />
       </form>
       <br />
@@ -188,7 +189,7 @@ async function sendGroupMessage(groupId, message) {
         <div class="input-group" style="max-width: 600px">
           <span class="input-group-text">@</span>
           <input
-            class="form-control"
+            class="form-control text-light"
             type="text"
             v-model="newUsername"
             placeholder="Enter the username to add"
